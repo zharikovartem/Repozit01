@@ -1,0 +1,97 @@
+<apex:page showHeader="false" controller="Buy">
+<apex:slds />
+  <!-- Begin Default Content REMOVE THIS -->
+ 
+  <!-- //////////////////////////////////////////////////////////////////////////////// -->
+  <apex:form >
+      <apex:actionFunction name="sayHello" action="{!sayHello}" rerender="out">
+      <apex:param assignTo="{!paramFromVF}" value="" name="newParam"/>
+      </apex:actionFunction>
+ 
+      <apex:actionFunction name="upscont" action="{!upscont}" rerender="out1">
+      <apex:param assignTo="{!EmailFromVF}" value="" name="newEmail"/> 
+      <apex:param assignTo="{!FirstNameFromVF}" value="" name="newFirstName"/>
+      <apex:param assignTo="{!LastNameFromVF}" value="" name="newLastname"/>
+      </apex:actionFunction>
+  -->
+  </apex:form>
+  
+  <script>
+      function greetings(masage){
+          var name_input = document.getElementById('j_id0:j_id11:j_id12:0:j_id20:qwerty');
+        var messege = name_input.value;
+      sayHello(messege);
+      }
+  
+      function Buy(Email, FirstName, Lastname){
+          Email_input = document.getElementById('j_id0:j_id11:j_id12:0:j_id14:Email');
+          FirstName_input = document.getElementById('j_id0:j_id11:j_id12:0:j_id14:FirstName');
+          Lastname_input = document.getElementById('j_id0:j_id11:j_id12:0:j_id14:LastName');
+          var Email= Email_input.value;
+          var FirstName= FirstName_input.value;
+          var Lastname= Lastname_input.value;
+          upscont(Email,FirstName, Lastname);
+          
+      }
+  </script>
+<!-- //////////////////////////////////////////////////////////////////////////////// -->
+  <apex:pageBlock >
+  <apex:pageBlockTable value="{!al}" var="prod">
+      <apex:column headerValue="Contact Information">
+          <apex:form >
+          <apex:outputPanel id="out1">
+          Email:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <apex:inputText id="Email"></apex:inputText>
+          <br/>
+          FirstName:&nbsp;&nbsp;
+          <apex:inputText id="FirstName"></apex:inputText>
+          <br/>
+          LastName*:&nbsp;
+          <apex:inputText id="LastName"></apex:inputText>
+          <br/>
+          </apex:outputPanel>
+          </apex:form>
+      </apex:column>
+      
+      <apex:column headerValue="Contact Information">
+          <apex:form >
+          Product Name:&nbsp;
+          <apex:outputText value="{!prod.name}"></apex:outputText>
+          <br/>
+          Cost:&nbsp;
+          <!--<apex:outputText Id="Cost" value="{!prod.Unit_Price__c}"></apex:outputText>-->
+          <span id="Cost">{!prod.Unit_Price__c}</span>
+          <br/>
+<!--//////////////////........ээээээээээээээээээээээээээээээээээээээээээээээээээээ////////////////////////////////////////////////////////////////////-->
+          Unit Count:&nbsp;
+          <apex:inputText id="qwerty" onchange="greetings()"></apex:inputText>
+          
+          
+          
+         
+                            
+          <br/>
+          Total Amount:&nbsp;
+          <apex:outputPanel id="out">
+          <apex:outputText value="{!username}"></apex:outputText>
+          </apex:outputPanel>
+          <br/>
+          </apex:form>
+      </apex:column>
+      
+  </apex:pageBlockTable>
+  </apex:pageBlock>
+  <!-- //////////////////////////////////////////////////////////////////////////////// -->
+  <apex:form >
+          <button class="slds-button slds-button_neutral"><apex:outputLink value="/apex/FirstVFPage" id="theLink">To Shoping</apex:outputLink></button>
+          <apex:commandButton onclick="Buy()" value="Buy"/>
+          <button class="slds-button slds-button_brand" onclick="Buy()">Buy</button>
+          <span onclick="Buy()">PROBA</span>
+  </apex:form>
+          <apex:form >
+          <apex:outputPanel id="out1">
+          <span></span>
+          </apex:outputPanel>
+          </apex:form>
+          
+</apex:page>
