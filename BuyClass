@@ -1,0 +1,57 @@
+public class Buy{
+    public string ZadID =ApexPages.currentPage().getParameters().get('id');
+    Product_Table__c ProductT = [SELECT name, Product_Discription__c, Unit_Price__c, Image_Url__c, Product_Title__c, Units_Ava__c       FROM Product_Table__c
+                                 WHERE Id = :ZadID LIMIT 1];
+    
+    public Product_Table__c getAl(){
+        return ProductT; 
+    	}
+    public Contact cont;
+    public Contact contx;
+    public Decimal greetingValue;
+    public string uservalue;
+    public Decimal myVariable = ProductT.Unit_Price__c;// 
+    public Decimal getUsername(){
+        return greetingValue;
+    	}
+
+    public integer paramFromVF=1;
+    public  PageReference sayHello(){
+        paramFromVF = integer.valueOf(ApexPages.currentPage().getParameters().get('newParam'));//передает количество товаров
+        greetingValue = paramFromVF *myVariable;
+        
+        return null;
+    	}
+    public string EmailFromVF;
+    public string FirstNameFromVF ='aaa';
+    public string LastNameFromVF ='bbb';
+    Public string ConAm;
+    
+    public PageReference upscont(){
+        EmailFromVF =ApexPages.currentPage().getParameters().get('newEmail');//передает имэйл
+        FirstNameFromVF= ApexPages.currentPage().getParameters().get('newFirstName');//передает ферстнэйм
+        LastNameFromVF= ApexPages.currentPage().getParameters().get('newLastName');//передает ластнэйм
+        cont = new Contact();
+        cont.LastName = LastNameFromVF;
+        cont.FirstName = FirstNameFromVF;
+        cont.Email= EmailFromVF;
+        List<Contact> cts = [SELECT LastName, Id       FROM Contact
+                             WHERE LastName= :ApexPages.currentPage().getParameters().get('newLastName') LIMIT 1];
+        if (cts.size()>0){
+            cont.Id = cts.get(0).Id;
+            update cont;
+        }
+        else
+            insert cont;
+        Contact ctsx = [SELECT LastName, Id       FROM Contact
+                              WHERE LastName= :LastNameFromVF LIMIT 1];
+        ConAm = ctsx.Id;
+        Order__c ord=new Order__c(
+            Product_Table__c= ApexPages.currentPage().getParameters().get('id'),
+            Units__c=paramFromVF,
+            Order_Amount__c= greetingValue,
+            Contact__c= ConAm);
+        insert ord;                       
+        return null;
+    }
+}
