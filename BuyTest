@@ -1,0 +1,77 @@
+@isTest
+private  class  BuyTest {
+
+    
+
+    @isTest static void Test01() {
+        PageReference BuyN = Page.Buy;
+		Test.setCurrentPage(BuyN);
+		Product_Table__c accts = new Product_Table__c(Name='TestProdId', Unit_Price__c=2);
+        insert accts;
+		ApexPages.currentPage().getParameters().put('id',accts.Id);
+        ApexPages.currentPage().getParameters().put('newParam','2');
+		String id = ApexPages.currentPage().getParameters().get('id');
+		System.assert(true,id==null);
+        
+        Buy BuyTest = new Buy();
+        BuyTest.sayHello();
+        Integer paramFromVFTest = BuyTest.paramFromVF;
+        BuyTest.myVariable=10;
+        Decimal myVariableTest = BuyTest.myVariable;
+        Decimal greetingValueTest = BuyTest.greetingValue;
+        System.debug('paramFromVFTest: '+ paramFromVFTest);
+        System.assertEquals(4,greetingValueTest);
+    	}
+    @isTest static void Test02() {
+        PageReference BuyN = Page.Buy;
+		Test.setCurrentPage(BuyN);
+		Product_Table__c accts = new Product_Table__c(Name='TestProdId', Unit_Price__c=2);
+        insert accts;
+		ApexPages.currentPage().getParameters().put('id',accts.Id);
+		String id = ApexPages.currentPage().getParameters().get('id');
+        decimal price = accts.Unit_Price__c;
+        
+        Buy BuyTest = new Buy();
+        BuyTest.getUsername();
+        Decimal greetingValueTest= price;
+        System.assertEquals(20,greetingValueTest*10);//дописать переменную из инпуттекст
+    }
+    @isTest static void Test03() {
+        PageReference BuyN = Page.Buy;
+		Test.setCurrentPage(BuyN);
+		        
+		Product_Table__c accts = new Product_Table__c(Name='TestProdId', Unit_Price__c=2);
+        
+        insert accts;
+		ApexPages.currentPage().getParameters().put('id',accts.Id);
+        string LastName = 'TestLastName';
+        ApexPages.currentPage().getParameters().put('newLastName',LastName);
+		String id = ApexPages.currentPage().getParameters().get('id');
+        
+		System.assert(true,id==null);
+        
+        Buy BuyTest = new Buy();
+        BuyTest.upscont();
+        BuyTest.EmailFromVF= 'aaa@bbb.ccc';
+        BuyTest.FirstNameFromVF= 'TestFirstName';
+        BuyTest.LastNameFromVF= 'TestLastName';
+        	contact contTest = new Contact();
+        	contTest.LastName = BuyTest.LastNameFromVF;
+        	contTest.FirstName = BuyTest.FirstNameFromVF;
+        	contTest.Email= BuyTest.EmailFromVF;
+        	insert contTest;
+        
+        Contact ctsxTest = [SELECT LastName, Id       FROM Contact
+                              WHERE Id= :contTest.Id LIMIT 1];
+        BuyTest.paramFromVF=2;
+        BuyTest.greetingValue=20;
+        BuyTest.ConAm=ctsxTest.Id;
+            Order__c ordTest=new Order__c(
+                Product_Table__c = accts.id,
+                Units__c=2,
+                Order_Amount__c= 20,
+                Contact__c= ctsxTest.Id);
+            insert ordTest; 
+        System.assertEquals(contTest.Id, ordTest.Contact__c);        
+    }
+}
